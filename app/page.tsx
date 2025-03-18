@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { savePrayerPoint, likePrayer, getAllPrayers } from "@/actions/helper"
+import { toast, Toaster } from "sonner"
 
 interface Prayer {
   id: string
@@ -9,6 +10,7 @@ interface Prayer {
   likes: number
   createdAt: string
 }
+
 
 export default function Home() {
   const [prayerPoint, setPrayerPoint] = useState("")
@@ -32,6 +34,7 @@ export default function Home() {
     setPrayerPoint("")
     setLoading(false)
     fetchPrayers()
+    toast.success("Prayer posted successfully 🙏")
   }
 
   const handleLike = async (id: string) => {
@@ -41,6 +44,8 @@ export default function Home() {
 
   return (
     <section className="p-6 min-h-screen flex flex-col items-center bg-gradient-to-b from-blue-200 to-white">
+      <Toaster position="top-center" richColors />
+
       <h1 className="text-3xl font-bold text-center mb-6 text-gray-700">
         🙏 Share Your Prayer Request 
       </h1>
