@@ -67,7 +67,7 @@ export default function Home() {
         ) : (
           prayers.map((prayer) => (
             <div key={prayer.id} className="relative p-6 rounded-xl shadow-lg text-white text-center bg-gradient-to-r from-gray-800 to-gray-600">
-              <p className="text-lg italic font-semibold">"{prayer.text}"</p>
+              <p className="text-lg italic font-semibold">&ldquo;{prayer.text}&rdquo;</p>
               <p className="text-sm text-gray-300 mt-2">
                 Posted on {new Date(prayer.createdAt).toLocaleString("en-US", {
                   hour: "numeric",
