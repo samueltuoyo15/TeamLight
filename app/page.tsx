@@ -3,17 +3,24 @@
 import { useState, useEffect } from "react"
 import { savePrayerPoint, likePrayer, getAllPrayers } from "@/actions/helper"
 
+interface Prayer {
+  id: string
+  text: string
+  likes: number
+  createdAt: string 
+}
+
 export default function Home() {
   const [prayerPoint, setPrayerPoint] = useState("")
   const [loading, setLoading] = useState(false)
-  const [prayers, setPrayers] = useState<any[]>([])
+  const [prayers, setPrayers] = useState<Prayer[]>([])
 
   useEffect(() => {
     fetchPrayers()
   }, [])
 
   const fetchPrayers = async () => {
-    const data = await getAllPrayers()
+    const data: Prayer[] = await getAllPrayers()
     setPrayers(data)
   }
 
@@ -33,43 +40,40 @@ export default function Home() {
   }
 
   return (
-    <section className="p-4 min-h-screen flex flex-col justify-center items-center">
-      <h1 className="text-xl font-semibold">Hola 👋 Send Prayer Points Here</h1>
+    <section className="p-6 min-h-screen flex flex-col items-center bg-gray-100">
+      <h1 className="text-3xl font-bold text-center mb-6 text-gray-800">🙏 Share Your Prayer Points</h1>
 
-      <form onSubmit={handleSubmit} className="mt-5 flex flex-col gap-3">
+      <form onSubmit={handleSubmit} className="w-full max-w-md bg-white shadow-lg rounded-lg p-5">
         <textarea
           value={prayerPoint}
           onChange={(e) => setPrayerPoint(e.target.value)}
-          className="text-black p-2 rounded-lg w-64 h-[130px]"
+          className="text-black p-3 w-full rounded-md border border-gray-300 focus:ring-2 focus:ring-blue-500"
           placeholder="Write your prayer here..."
         />
         <button
           type="submit"
-          className="cursor-pointer w-full rounded-2xl text-center p-2 bg-[#308CD8] text-white transition duration-300 hover:bg-[#256ba5]"
+          className="w-full mt-3 py-2 rounded-lg bg-blue-600 text-white text-lg font-semibold hover:bg-blue-800 transition"
           disabled={loading}
         >
-          {loading ? "Posting..." : "Post"}
+          {loading ? "Posting..." : "Post Prayer"}
         </button>
       </form>
 
-      <div className="mt-8 w-full max-w-md flex flex-col gap-4">
+      <div className="mt-8 w-full max-w-md flex flex-col gap-6">
         {prayers.length === 0 ? (
-          <p className="text-gray-400 text-center">No prayer points yet...</p>
+          <p className="text-gray-500 text-center">No prayer points yet...</p>
         ) : (
           prayers.map((prayer) => (
-            <div
-              key={prayer.id}
-              className="bg-white text-black p-4 rounded-lg shadow-md flex justify-between items-center"
-            >
-              <p className="text-sm">{prayer.text}</p>
-              <button
-                onClick={() => handleLike(prayer.id)}
-                className="flex items-center gap-1"
+            <div key={prayer.id} className="p-5 bg-white rounded-lg shadow-md border border-gray-200">
+              <p className="text-lg font-semibold text-gray-700">"{prayer.text}"</p>
+              <p className="text-sm text-gray-500 mt-2">
+                Posted on {new Date(prayer.createdAt).toLocaleDateString()}
+              </p>
+              <button 
+                onClick={() => handleLike(prayer.id)} 
+                className="mt-3 flex items-center gap-1 text-lg text-gray-600 hover:text-red-500 transition"
               >
-                <span className={prayer.likes > 0 ? "text-red-500" : "text-gray-400"}>
-                  ❤️
-                </span>
-                <span className="text-sm">{prayer.likes}</span>
+                ❤️ <span>{prayer.likes}</span>
               </button>
             </div>
           ))
