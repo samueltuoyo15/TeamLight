@@ -7,7 +7,7 @@ interface Prayer {
   id: string
   text: string
   likes: number
-  createdAt: string 
+  createdAt: string
 }
 
 export default function Home() {
@@ -20,7 +20,7 @@ export default function Home() {
   }, [])
 
   const fetchPrayers = async () => {
-    const data: Prayer[] = await getAllPrayers()
+    const data = await getAllPrayers()
     setPrayers(data)
   }
 
@@ -40,8 +40,10 @@ export default function Home() {
   }
 
   return (
-    <section className="p-6 min-h-screen flex flex-col items-center bg-gray-100">
-      <h1 className="text-3xl font-bold text-center mb-6 text-gray-800">🙏 Share Your Prayer Points</h1>
+    <section className="p-6 min-h-screen flex flex-col items-center bg-gradient-to-b from-blue-200 to-white">
+      <h1 className="text-3xl font-bold text-center mb-6 text-gray-700">
+        🙏 Share Your Prayer Request 
+      </h1>
 
       <form onSubmit={handleSubmit} className="w-full max-w-md bg-white shadow-lg rounded-lg p-5">
         <textarea
@@ -64,16 +66,21 @@ export default function Home() {
           <p className="text-gray-500 text-center">No prayer points yet...</p>
         ) : (
           prayers.map((prayer) => (
-            <div key={prayer.id} className="p-5 bg-white rounded-lg shadow-md border border-gray-200">
-              <p className="text-lg font-semibold text-gray-700">"{prayer.text}"</p>
-              <p className="text-sm text-gray-500 mt-2">
-                Posted on {new Date(prayer.createdAt).toLocaleDateString()}
+            <div key={prayer.id} className="relative p-6 rounded-xl shadow-lg text-white text-center bg-gradient-to-r from-gray-800 to-gray-600">
+              <p className="text-lg italic font-semibold">"{prayer.text}"</p>
+              <p className="text-sm text-gray-300 mt-2">
+                Posted on {new Date(prayer.createdAt).toLocaleString("en-US", {
+                  hour: "numeric",
+                  minute: "numeric",
+                  hour12: true,
+                  month: "long",
+                  day: "numeric",
+                  year: "numeric",
+                })}
               </p>
-              <button 
-                onClick={() => handleLike(prayer.id)} 
-                className="mt-3 flex items-center gap-1 text-lg text-gray-600 hover:text-red-500 transition"
-              >
-                ❤️ <span>{prayer.likes}</span>
+              <button onClick={() => handleLike(prayer.id)} className="mt-3 flex items-center gap-1 text-lg">
+                <span className={prayer.likes > 0 ? "text-red-500" : "text-gray-300"}>❤️</span>
+                <span>{prayer.likes}</span>
               </button>
             </div>
           ))
